@@ -13,9 +13,9 @@ const sub = redisClient.duplicate();//Redis required 2 conns
 //ToDo: Input keyword from client UI 
 let keyword = 'trump';
 
-function sentimentAnalysis() {
+function sentimentAnalysis(keyword) {
     // spawn new child process to call the python script
-    const python = spawn('python3', ['../scripts/TwitterSentimentAnalysis.py', keyword]);
+    const python = spawn('python3', ['./scripts/TwitterSentimentAnalysis.py', keyword]);
     // collect data from script
     python.stdout.on('data', (data) => {
         console.log('Pipe data from python script ...');
@@ -27,12 +27,12 @@ function sentimentAnalysis() {
     python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
     });
-    return data;
 }
+sentimentAnalysis(keyword);
 
-//function data to Redis instance
+//Monitor redis quque for NEW values, call script
 sub.on('message', () => {
     redis.redisClient.hset('values', message, sentimentAnalysis(message));
 })
-
+//Subscribe to new value insert (keyword input for analysis)
 sub.subscribe('insert');
