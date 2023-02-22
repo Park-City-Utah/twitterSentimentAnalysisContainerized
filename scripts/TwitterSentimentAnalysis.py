@@ -37,15 +37,14 @@ def main():
     # Remove 0.0 (neutral) polarity & subjectivity
     polarity = remove_all_values(polarity, 0.0)
 
-    # Generate polarity istogram
+    # Generate polarity histogram
     polarityDf = pd.DataFrame(
         polarity, columns=["Polarity - '" + keyword + "'"])
     polarityDf.hist(color="orange")
-    plt.savefig('./assets/polarity_' + keyword + '.pdf')
+    histDirectory = './assets/polarity_' + keyword + '.pdf'
+    plt.savefig(histDirectory)
 
-    file = 'polarity_' + keyword + '.pdf'
-
-    print(file)
+    print(histDirectory)
 
 
 main()
