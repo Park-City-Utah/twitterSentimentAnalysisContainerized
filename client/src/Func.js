@@ -1,27 +1,40 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
+//import { useState } from 'react';
 
-class Funct extends Component {
+class Func extends Component {
+// function indexes() {
+//     const [seenIndexes, setIndexes] = useState([]);//return array
+//     const [values, setValues] = useState({});//return list
+//      const [keywords, setKeywords] = useState([]);
+//      const [keyword, setKeyword] = useState();
     
     state = {
-        seenIndexes: [],
+        seenKeywords: [],
         values: {},
-        index: '',
-        keywords: [],
         keyword: ''
     };
 
     componentDidMount() {
         this.fetchValues();
-        this.fetchIndexes();
         this.fetchKeywords();
     }
 
-
-    async fetchKeywords() {
-        const seenIndexes = await axios.get('/api/values/all');
-        this.setState({ seenIndexes: seenIndexes.data});
+    // Fetch calculated values (urls) from Python script & API (NLP analyssi)
+    async fetchValues() {
+        const values = await axios.get('/api/values/curent');
+        this.setState({ values: values.data});
     }
+
+    // Return all keywords submitted
+    async fetchKeywords() {
+        const seenKeywords = await axios.get('/api/values/all');
+        this.setState({ seenKeywords: seenKeywords.data});
+    }
+
+    // useEffect(() => {
+    //     fetchValues().then(setValues); //.then gets called on the proimise
+    //   }, []);
 
     handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,23 +46,24 @@ class Funct extends Component {
     };
 
     //Postgres returned
-    renderKeywords(){
-        return this.state.keywords.map( ( {word}) => word ).join(', ');//iterate over all and return string
+    renderSeenKeywords(){
+        return this.state.seenKeywords.map( ( {word}) => word ).join(', ');//iterate over all and return string
     }
 
     //Redis returned, all previous historgrams
-    renderHistograms(){
-        const histograms = [];
-
-        for (let key in this.state.keywords) {
-            histograms.push(
-                <div key={key}>
-                    For {key} in {this.state.keywords[key]}
-                </div>   
-            );         
+    renderValues() {
+        const entries = [];
+    
+        for (let key in this.state.values) {
+          entries.push(
+            <div key={key}>
+              For index {key} I calculated {this.state.values[key]}
+            </div>
+          );
         }
-        return histograms;
-    }
+    
+        return entries;
+      }
 
     render() {
         return(
@@ -64,13 +78,13 @@ class Funct extends Component {
                 </form>
 
                 <h3>Keywords previously analyzed:</h3>
-                {this.renderKeywords}
+                {this.renderKeywords()}
 
-                <h3>Histogram</h3>
-                {this.renderHistogram}
+                <h3>Values</h3>
+                {this.renderValues()}
             </div>
 
         );
     }
 }
-export default Funct;
+export default Func;
