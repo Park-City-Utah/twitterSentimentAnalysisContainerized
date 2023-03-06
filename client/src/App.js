@@ -13,13 +13,13 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <h1 className="App-title">Welcome to my NLP Sentiment Analysis App</h1>
         
-        <Link to="/">Home</Link>
-        <Link to="/otherpage">Otherpage</Link>
+        {/* <Link to="/">Home</Link>
+        <Link to="/otherpage">Otherpage</Link> */}
       </header>
-      <div>
+      {/* <div>
           <Route exact path="/" component={Func} />
           <Route exact path="/otherpage" component={OtherPage} />
-      </div>
+      </div> */}
     </div>
     </Router>
   );

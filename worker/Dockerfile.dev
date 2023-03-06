@@ -2,5 +2,13 @@ FROM node:14.14.0-alpine
 WORKDIR '/app'
 COPY ./package.json ./
 RUN npm install 
+# RUN apk add python3-dev
+# RUN apk add py3-pip
+# RUN pip3 install --upgrade pip
+# RUN apk add --no-cache gcc
+# RUN apk add libc-dev
+# RUN pip uninstall pandas numpy 
+# RUN pip install pandas numpy==1.20.3 tweepy textblob
 COPY . .
 CMD ["npm", "run", "dev"]
+#ToDo: ADD PYTHON 3
