@@ -1,9 +1,9 @@
 import sys
 import tweepy
 import os as os
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+#import numpy as np
+#import pandas as pd
+#import matplotlib.pyplot as plt
 from textblob import TextBlob
 from keys import *
 
@@ -21,9 +21,9 @@ def remove_all_values(myList, valueForRemoval):
 
 def main():
     # Get user input for Sentiment analysis text
-    keyword = sys.argv[1]
+    #keyword = sys.argv[1]
     # Pull Tweets on keyword
-    tweets = api.search(keyword, count=1000)
+    tweets = api.search("trump", count=1000)
     polarity = []
 
     # Perform analysis and create lists for manipulation (polarity/subjectivity)
@@ -36,15 +36,16 @@ def main():
 
     # Remove 0.0 (neutral) polarity & subjectivity
     polarity = remove_all_values(polarity, 0.0)
+    print(polarity)
 
-    # Generate polarity histogram
-    polarityDf = pd.DataFrame(
-        polarity, columns=["Polarity - '" + keyword + "'"])
-    polarityDf.hist(color="orange")
-    histDirectory = './assets/polarity_' + keyword + '.pdf'
-    plt.savefig(histDirectory)
+    # # Generate polarity histogram
+    # polarityDf = pd.DataFrame(
+    #     polarity, columns=["Polarity - '" + keyword + "'"])
+    # polarityDf.hist(color="orange")
+    # histDirectory = './assets/polarity_' + keyword + '.pdf'
+    # plt.savefig(histDirectory)
 
-    print(histDirectory)
+    # print(histDirectory)
 
 
 main()

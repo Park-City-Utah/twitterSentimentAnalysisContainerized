@@ -1,4 +1,5 @@
 const keys  = require('./keys');
+//import Func from '../client/src/Func';
 
 //Express
 const express = require('express');
@@ -23,12 +24,19 @@ const pgClient = new Pool({
 //Error listener
 pgClient.on('error', () => console.log('Lost PG connection'));
 
-//Table creation, if not exists, table is 'keyword' from user input
+//Table ceation
 pgClient.on("connect", (client) => {
-    client
-      .query("CREATE TABLE IF NOT EXISTS values (keyword varchar(255) NOT NULL)")
-      .catch((err) => console.error(err));
+  client
+    .query("CREATE TABLE IF NOT EXISTS values (number INT)")
+    .catch((err) => console.error(err));
 });
+
+// //Table creation, if not exists, table is 'keyword' from user input
+// pgClient.on("connect", (client) => {
+//     client
+//       //.query("CREATE TABLE IF NOT EXISTS values (keyword varchar(10))")
+//       .catch((err) => console.error(err));
+// });
 
 //Redis Client
 const redis = require('redis');
@@ -58,17 +66,30 @@ app.get('/values/current', async (req, res) => {
   });
 });
 
-app.post('/values', async (req, res) => {
+app.post("/values", async (req, res) => {
   const index = req.body.index;
 
-  //Add to redis 
-  redisClient.hset('values', index, 'Nothing yet');
-  redisPublisher('insert', index);
-  //Store keyword perminantly in postgres database
-  pgClient.query('INSERT INTO values(varchar) VALUES($1)', [index]);
+  if (parseInt(index) > 40) {
+    return res.status(422).send("Index too high");
+  }
+
+  redisClient.hset("values", index, "Nothing yet!");
+  redisPublisher.publish("insert", index);
+  pgClient.query("INSERT INTO values(number) VALUES($1)", [index]);
 
   res.send({ working: true });
-}); 
+});
+// app.post('/values', async (req, res) => {
+//   const keyword = req.body.keyword;
+
+//   //Add to redis 
+//   redisClient.hset('values', keyword, funcTest(keyword));
+//   redisPublisher.publish('insert', keyword);
+//   //Store keyword perminantly in postgres database
+//   pgClient.query('INSERT INTO values VALUES($1)', [keyword]);
+
+//   res.send({ working: true });
+// }); 
 
 app.listen(5000, err => {
   console.log('Listening')
