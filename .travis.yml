@@ -4,21 +4,21 @@ services:
 
 //username for Travic ci
 before_install: 
-  - docker build -t Park-City-Utah/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t parkcity/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true Park-City-Utah/react-test npm test
+  - docker run -e CI=true parkcity/react-test npm test
 
 after_success:
-  - docker build -t Park-City-Utah/multi-client ./client
-  - docker build -t Park-City-Utah/multi-server ./server
-  - docker build -t Park-City-Utah/multi-worker ./worker
-  - docker build -t Park-City-Utah/multi-nginx ./nginx
+  - docker build -t parkcity/multi-client ./client
+  - docker build -t parkcity/multi-server ./server
+  - docker build -t parkcity/multi-worker ./worker
+  - docker build -t parkcity/multi-nginx ./nginx
 
 # Log in to the docker CLI 
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
 # Take those images and push them to docker hub
-- docker push Park-City-Utah/multi-client
-- docker push Park-City-Utah/multi-server
-- docker push Park-City-Utah/multi-worker
-- docker push Park-City-Utah/multi-nginx
+- docker push parkcity/multi-client
+- docker push parkcity/multi-server
+- docker push parkcity/multi-worker
+- docker push parkcity/multi-nginx
