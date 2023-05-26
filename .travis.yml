@@ -3,21 +3,21 @@ services:
   - docker
 
 before_install: 
-  - docker build -t parker/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t parkcity/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true parker/react-test npm test
+  - docker run -e CI=true parkcity/react-test npm test
 
 after_success:
-  - docker build -t parker/multi-client ./client
-  - docker build -t parker/multi-server ./server
-  - docker build -t parker/multi-worker ./worker
-  - docker build -t parker/multi-nginx ./nginx
+  - docker build -t parkcity/multi-client ./client
+  - docker build -t parkcity/multi-server ./server
+  - docker build -t parkcity/multi-worker ./worker
+  - docker build -t parkcity/multi-nginx ./nginx
 
 # Log in to the docker CLI 
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
 # Take those images and push them to docker hub
-- docker push parker/multi-client
-- docker push parker/multi-server
-- docker push parker/multi-worker
-- docker push parker/multi-nginx
+- docker push parkcity/multi-client
+- docker push parkcity/multi-server
+- docker push parkcity/multi-worker
+- docker push parkcity/multi-nginx
